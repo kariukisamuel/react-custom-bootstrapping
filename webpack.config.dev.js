@@ -1,5 +1,4 @@
 const webpack = require("webpack");
-
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
@@ -21,7 +20,7 @@ module.exports = {
     historyApiFallback: true,
     disableHostCheck: true,
     headers: { "Access-Control-Allow-Origin": "*" },
-    http: false,
+    https: false,
   },
   plugins: [
     new HtmlWebpackPlugin({
