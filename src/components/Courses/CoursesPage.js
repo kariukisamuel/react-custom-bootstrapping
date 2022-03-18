@@ -5,6 +5,7 @@ import * as authorActions from "../../redux/actions/authorActions";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
+import Spinner from "../Common/Spinner";
 
 class CoursePage extends React.Component {
   componentDidMount() {
@@ -24,7 +25,11 @@ class CoursePage extends React.Component {
     return (
       <>
         <h2>Courses</h2>
-        <CourseList courses={this.props.courses}></CourseList>
+        {this.props.loading ? (
+          <Spinner />
+        ) : (
+          <CourseList courses={this.props.courses}></CourseList>
+        )}
       </>
     );
   }
@@ -34,6 +39,7 @@ CoursePage.propTypes = {
   actions: PropTypes.object.isRequired,
   courses: PropTypes.array.isRequired,
   authors: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -49,6 +55,7 @@ function mapStateToProps(state, ownProps) {
             };
           }),
     authors: state.authors,
+    loading: state.apiCallsInProgress > 0,
   };
 }
 function mapDispatchToProps(dispatch) {
