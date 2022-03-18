@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import CourseList from "./CourseList";
 import Spinner from "../Common/Spinner";
+import { toast } from "react-toastify";
 
 class CoursePage extends React.Component {
   componentDidMount() {
@@ -21,6 +22,15 @@ class CoursePage extends React.Component {
       });
     }
   }
+  handleDeleteCourse = async (course) => {
+    toast.success("Course Deleted");
+    try {
+      await this.props.actions.deleteCourse(course);
+    } catch (error) {
+      toast.error("Delete Failed" + error.message, { autoClose: false });
+    }
+  };
+
   render() {
     return (
       <>
@@ -28,7 +38,10 @@ class CoursePage extends React.Component {
         {this.props.loading ? (
           <Spinner />
         ) : (
-          <CourseList courses={this.props.courses}></CourseList>
+          <CourseList
+            onDeleteClick={this.handleDeleteCourse}
+            courses={this.props.courses}
+          ></CourseList>
         )}
       </>
     );
@@ -63,6 +76,7 @@ function mapDispatchToProps(dispatch) {
     actions: {
       loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
       loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
+      deleteCourse: bindActionCreators(courseActions.deleteCourse, dispatch),
     },
   };
 }
